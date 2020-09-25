@@ -1,0 +1,34 @@
+
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <title>Roulette</title>
+        <meta name='viewport' content='width=device-width, user-scalable=no'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' rel='stylesheet'>
+        <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+        <link href='./roulette.css' rel='stylesheet'>
+        <script src='./animation.js'></script>
+        <script src='./roulette.js'></script>
+    </head>
+    <body>
+        <div class='main'>
+            <div id='roulette' class='flexRow'>
+                <canvas id='cnv'></canvas>
+            </div>
+            <div class='buttons'>
+                <span class='material-icons button' onclick='roulette.play()'>play_arrow</span>
+                <span class='material-icons button' onclick='showManagement(true)'>settings</span>
+            </div>
+        </div>
+        <div id='management' class='flexCol'>
+            <div id='buttonClose'><span class='material-icons button' onclick='showManagement(false)'>close</span></div>
+            <div id='managementColumns' class='flexRow'>
+                <div id='managementList' class='flexCol'></div>
+                <div id='managementForm' class='flexCol'>
+                    <textarea id='text' rows="15"></textarea>
+                    <button onclick='managementAddToList()'>Add list</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
