@@ -41,6 +41,14 @@ function managementRemoveItem (id) {
     managementRedoList()
 }
 
+function managementSetShow (val) {
+    roulette.showWeigths = val
+}
+
+function managementSetType (val) {
+    roulette.playType = val
+}
+
 class ObjRoulette {
 
     constructor () {
@@ -55,7 +63,7 @@ class ObjRoulette {
         window.removeEventListener('load', this.handler)
 
         this.playType = 'eliminate' // 'all', 'weigth', 'eliminate'
-        this.showWeigths = true
+        this.showWeigths = false
 
         this.list = [
             { id: 0, text: 'Cara',   wins: 0,  weight: 0 }, 
@@ -260,11 +268,11 @@ class ObjRoulette {
             times = 0
 
         for (cntA = 0; cntA < this.list.length; cntA = cntA + 1) {
-            if (this.list[cntA].wins > top) top = this.list[cntA].wins > top
+            if (this.list[cntA].wins > top) top = this.list[cntA].wins
         }
 
         for (cntA = 0; cntA < this.list.length; cntA = cntA + 1) {
-            times = this.list[cntA].wins - top
+            times = 1 + top - this.list[cntA].wins
             for (cntB = 0; cntB < times; cntB = cntB + 1) {
                 tmpArr.push(this.list[cntA])
             }
@@ -273,7 +281,6 @@ class ObjRoulette {
         if (tmpArr.length === 0) tmpArr = this.list
 
         winner = Math.floor(Math.random() * tmpArr.length)
-
         for (cntA = 0; cntA < this.list.length; cntA = cntA + 1) {
             if (this.list[cntA].id === tmpArr[winner].id) {
                 return cntA
@@ -319,7 +326,7 @@ class ObjRoulette {
                 }
             } else {
                 for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-                    if (this.list[cnt].wins > top) top = this.list[cnt].wins > top
+                    if (this.list[cnt].wins > top) top = this.list[cnt].wins
                 }
                 for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
                     this.list[cnt].weight = this.list[cnt].wins / top
