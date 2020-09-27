@@ -27,19 +27,22 @@
                 <div id='managementForm' class='flexCol flexGrow'>
                     <div class='formGroup flexCol'>
                         Show weigths: 
-                        <div><input type='radio' name='weigths' value='true'  onclick='managementSetShow("true")'>True</div>
-                        <div><input type='radio' name='weigths' value='false' onclick='managementSetShow("false")' checked>False</div>
+                        <div><input id='radioShowTrue' type='radio' name='weigths' value='true'  onclick='managementSetShow("true")'>True</div>
+                        <div><input id='radioShowFalse' type='radio' name='weigths' value='false' onclick='managementSetShow("false")' checked>False</div>
                     </div>
                     <div class='formGroup flexCol'>
                         Luck type:
-                        <div><input type='radio' name='type' value='all' onclick="managementSetType('all')">All</div>
-                        <div><input type='radio' name='type' value='elimination' onclick="managementSetType('eliminate')" checked>Elimination</div>
-                        <div><input type='radio' name='type' value='wheights' onclick="managementSetType('weigth')">Wheights</div>
+                        <div><input id='radioTypeAll' type='radio' name='type' value='all' onclick="managementSetType('all')">All</div>
+                        <div><input id='radioTypeEliminate' type='radio' name='type' value='elimination' onclick="managementSetType('eliminate')" checked>Elimination</div>
+                        <div><input id='radioTypeWeigth' type='radio' name='type' value='wheights' onclick="managementSetType('weigth')">Wheights</div>
                     </div>
-                    <div class='formGroup flexCol'>
+                    <div class='formGroup flexCol flexGrow'>
                         Add (each new item by new line):
                         <textarea id='text' rows="15"></textarea>
                         <button onclick='managementAddToList()'>Add to list</button>
+                    </div>
+                    <div class='formGroup flexCenter'>
+                        <button onclick='managementClear()'>Clear data storage</button>
                     </div>
                 </div>
             </div>

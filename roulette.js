@@ -17,6 +17,8 @@ function managementAddToList () {
     }
     managementRedoList()
     ref.value = ''
+    
+    roulette.dataSave()
 }
 
 function managementRedoList () {
@@ -39,14 +41,23 @@ function managementRedoList () {
 function managementRemoveItem (id) {
     roulette.removeItem(id)
     managementRedoList()
+    roulette.dataSave()
 }
 
 function managementSetShow (val) {
-    roulette.showWeigths = val
+    roulette.showWeigths = (val === 'true')
+    roulette.dataSave()
 }
 
 function managementSetType (val) {
     roulette.playType = val
+    roulette.dataSave()
+}
+
+function managementClear () {
+
+    roulette.dataClear()
+    managementRedoList()
 }
 
 class ObjRoulette {
@@ -62,20 +73,9 @@ class ObjRoulette {
     init () {
         window.removeEventListener('load', this.handler)
 
-        this.playType = 'eliminate' // 'all', 'weigth', 'eliminate'
-        this.showWeigths = false
-
-        this.list = [
-            { id: 0, text: 'Cara',   wins: 0,  weight: 0 }, 
-            { id: 1, text: 'Creu',   wins: 0,  weight: 0 },
-        ]
         this.twoPI = Math.PI * 2
-        this.angle = 0
-        this.last = ''
         this.anim = new Animation()
         this.playTimeout = undefined
-        this.lastWin = -1
-
         this.cnv = document.getElementById('cnv')
         this.ctx = this.cnv.getContext('2d')
 
@@ -83,6 +83,8 @@ class ObjRoulette {
         this.timeNow = 0
         this.fps = 0
         this.fpsDraw = false
+
+        this.dataLoad()
 
         this.resize()
         this.draw()
@@ -94,6 +96,82 @@ class ObjRoulette {
 
         this.cnv.width = parseInt(style.getPropertyValue('width'))
         this.cnv.height = parseInt(style.getPropertyValue('height'))
+    }
+
+    dataSave () {
+        localStorage.playType = this.playType
+        localStorage.showWeigths = this.showWeigths
+
+        localStorage.list = JSON.stringify(this.list)
+        localStorage.angle = this.angle
+        localStorage.lastWin = this.lastWin
+    }
+
+    dataLoad () {
+
+        if (localStorage.playType) {
+
+            this.playType = localStorage.playType
+            switch (this.playType) {
+            case 'all':
+                document.getElementById('radioTypeAll').checked = true
+                break;
+            case 'eliminate':
+                document.getElementById('radioTypeEliminate').checked = true
+                break;
+            default:
+                document.getElementById('radioTypeWeigth').checked = true
+            }
+
+            this.showWeigths = (localStorage.showWeigths === 'true')
+            if (this.showWeigths) {
+                document.getElementById('radioShowTrue').checked = true
+            } else {
+                document.getElementById('radioShowFalse').checked = true
+            }
+    
+            this.list = JSON.parse(localStorage.list)
+            this.angle = parseFloat(localStorage.angle)
+            this.lastWin = parseInt(localStorage.lastWin, 10)
+
+        } else {
+
+            this.playType = 'eliminate' // 'all', 'weigth', 'eliminate'
+            this.showWeigths = false
+    
+            this.list = [
+                { id: 0, text: 'Cara',   wins: 0,  weight: 0 }, 
+                { id: 1, text: 'Creu',   wins: 0,  weight: 0 },
+            ]
+    
+            this.angle = 0
+            this.lastWin = -1
+        }
+    }
+
+    dataClear () {
+        console.log('a')
+
+        localStorage.removeItem('playType')
+        localStorage.removeItem('showWeigths')
+
+        localStorage.removeItem('list')
+        localStorage.removeItem('angle')
+        localStorage.removeItem('lastWin')
+
+        this.playType = 'eliminate' // 'all', 'weigth', 'eliminate'
+        document.getElementById('radioTypeEliminate').checked = true
+
+        this.showWeigths = false
+        document.getElementById('radioShowFalse').checked = true
+
+        this.list = [
+            { id: 0, text: 'Cara',   wins: 0,  weight: 0 }, 
+            { id: 1, text: 'Creu',   wins: 0,  weight: 0 },
+        ]
+
+        this.angle = 0
+        this.lastWin = -1  
     }
 
     draw () {
@@ -182,10 +260,6 @@ class ObjRoulette {
             ctx.save()
             ctx.translate(migX, migY)
             ctx.rotate(angleM)
-            
-            if (cnt === item) {
-            this.last = nom
-            }
         
             ctx.fillText(nom, radi - ctx.measureText(nom).width - 6, 0)
 
@@ -197,18 +271,20 @@ class ObjRoulette {
             ctx.arc(0, 0, radi, angleE, angleB, this.twoPI)
             ctx.stroke()
 
-            ctx.fillStyle = 'rgba(100, 100, 100, ' + (0.2 * this.list[cnt].weight) + ')'
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(radi * Math.cos(angleB), radi * Math.sin(angleB))
-            ctx.arc(0, 0, radi, angleE, angleB, this.twoPI)
-            ctx.fill()
-
-            ctx.beginPath()
-            ctx.moveTo(0, 0)
-            ctx.lineTo(radi * Math.cos(angleB), radi * Math.sin(angleB))
-            ctx.lineTo(radi * Math.cos(angleE), radi * Math.sin(angleE))
-            ctx.fill()
+            if (this.showWeigths) {
+                ctx.fillStyle = 'rgba(100, 100, 100, ' + (0.2 * this.list[cnt].weight) + ')'
+                ctx.beginPath()
+                ctx.moveTo(0, 0)
+                ctx.lineTo(radi * Math.cos(angleB), radi * Math.sin(angleB))
+                ctx.arc(0, 0, radi, angleE, angleB, this.twoPI)
+                ctx.fill()
+    
+                ctx.beginPath()
+                ctx.moveTo(0, 0)
+                ctx.lineTo(radi * Math.cos(angleB), radi * Math.sin(angleB))
+                ctx.lineTo(radi * Math.cos(angleE), radi * Math.sin(angleE))
+                ctx.fill()
+            }
 
             ctx.restore()
         
@@ -251,7 +327,10 @@ class ObjRoulette {
             if (this.lastWin >= 0 && this.lastWin < this.list.length) {
                 this.list[this.lastWin].wins = this.list[this.lastWin].wins + 1
             }
+
             this.setWeights()
+            this.dataSave()
+
         }, time - 500)
     }
 

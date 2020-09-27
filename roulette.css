@@ -20,6 +20,15 @@ body {
     flex-grow: 1;
 }
 
+.flexCenter {
+    display: flex;
+    justify-content: center;
+}
+
+.flexGrow {
+    flex-grow: 1;
+}
+
 .listItem {
     padding: 4px;
 }
