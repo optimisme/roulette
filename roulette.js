@@ -13,7 +13,7 @@ function managementAddToList () {
         arr = ref.value.split('\n')
 
     for (cnt = 0; cnt < arr.length; cnt = cnt + 1) {
-        roulette.addToList(arr[cnt])
+        if (arr[cnt] !== '') roulette.addToList(arr[cnt])
     }
     managementRedoList()
     ref.value = ''
@@ -55,9 +55,18 @@ function managementSetType (val) {
 }
 
 function managementClear () {
-
     roulette.dataClear()
     managementRedoList()
+}
+
+function shuffleArray (arr) {
+    let x, y, tmp
+    for (x = arr.length - 1; x > 0; x = x - 1) {
+        y = Math.floor(Math.random() * (x + 1))
+        tmp = arr[x]
+        arr[x] = arr[y]
+        arr[y] = tmp
+    }
 }
 
 class ObjRoulette {
@@ -150,8 +159,6 @@ class ObjRoulette {
     }
 
     dataClear () {
-        console.log('a')
-
         localStorage.removeItem('playType')
         localStorage.removeItem('showWeigths')
 
@@ -338,6 +345,27 @@ class ObjRoulette {
         return Math.floor(Math.random() * this.list.length)
     }
 
+    getWinnerEliminate () {
+        let cnt = 0,
+            tmpArr = this.list.filter((item) => { return (item.wins === 0) }),
+            winner = Math.floor(Math.random() * tmpArr.length)
+
+        if (tmpArr.length === 0) {
+            this.clearWeights()
+            return Math.floor(Math.random() * this.list.length)
+        }
+
+        shuffleArray(tmpArr)
+
+        for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
+            if (this.list[cnt].id === tmpArr[winner].id) {
+                return cnt
+            }
+        }
+
+        return 0
+    }
+
     getWinnerWeight () {
         let cntA = 0,
             cntB = 0,
@@ -357,6 +385,7 @@ class ObjRoulette {
             }
         }
 
+        shuffleArray(tmpArr)
         if (tmpArr.length === 0) tmpArr = this.list
 
         winner = Math.floor(Math.random() * tmpArr.length)
@@ -369,59 +398,42 @@ class ObjRoulette {
         return 0
     }
 
-    getWinnerEliminate () {
-        let cnt = 0,
-            tmpArr = this.list.filter((item) => { return (item.wins === 0) }),
-            winner = Math.floor(Math.random() * tmpArr.length)
-
-        if (tmpArr.length === 0) return 0
-
-        for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-            if (this.list[cnt].id === tmpArr[winner].id) {
-                return cnt
-            }
-        }
-
-        return 0
-    }
-
     setWeights () {
         let cnt = 0,
             top = 0
 
-        if (!this.showWeigths) {
+        for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
+            if (this.list[cnt].wins > top) top = this.list[cnt].wins
+        }
+
+        if (top == 0) {
             for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
                 this.list[cnt].weight = 0
             }
         } else {
-            if (this.playType === 'all') {
-                for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-                    this.list[cnt].weight = 0
-                }
-            } else if (this.playType === 'eliminate') {
-                for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-                    if (this.list[cnt].wins === 0) this.list[cnt].weight = 0
-                    else this.list[cnt].weight = 1
-                }
-            } else {
-                for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-                    if (this.list[cnt].wins > top) top = this.list[cnt].wins
-                }
-                for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
-                    this.list[cnt].weight = this.list[cnt].wins / top
-                }
+            for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
+                this.list[cnt].weight = this.list[cnt].wins / top
             }
+        }
+    }
+
+    clearWeights () {
+        let cnt = 0
+        for (cnt = 0; cnt < this.list.length; cnt = cnt + 1) {
+            this.list[cnt].weight = 0
         }
     }
 
     addToList (name) {
         this.list.push({ id: 0, text: name,   wins: 0,  weight: 0 })
         this.redoIds()
+        this.setWeights()
     }
 
     removeItem (id) {
         this.list.splice(id, 1)
         this.redoIds()
+        this.setWeights()
     }
 
     redoIds () {
