@@ -54,6 +54,10 @@ function managementSetType (val) {
     roulette.dataSave()
 }
 
+function managementClearWeights () {
+    roulette.clearWeights();
+}
+
 function managementClear () {
     roulette.dataClear()
     managementRedoList()
