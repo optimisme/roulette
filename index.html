@@ -1,52 +1,34 @@
-
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset='utf-8'/>
-        <title>Roulette</title>
-        <meta name='viewport' content='width=device-width, user-scalable=no'>
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' rel='stylesheet'>
-        <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
-        <link href='./roulette.css' rel='stylesheet'>
-        <script src='./animation.js'></script>
-        <script src='./roulette.js'></script>
-    </head>
-    <body>
-        <div class='main'>
-            <div id='roulette' class='flexRow'>
-                <canvas id='cnv'></canvas>
-            </div>
-            <div class='buttons'>
-                <span class='material-icons button' onclick='roulette.play()'>play_arrow</span>
-                <span class='material-icons button' onclick='showManagement(true)'>settings</span>
-            </div>
-        </div>
-        <div id='management' class='flexCol'>
-            <div id='buttonClose'><span class='material-icons button' onclick='showManagement(false)'>close</span></div>
-            <div id='managementColumns' class='flexRow'>
-                <div id='managementList' class='flexCol flexGrow'></div>
-                <div id='managementForm' class='flexCol flexGrow'>
-                    <div class='formGroup flexCol'>
-                        Show weigths: 
-                        <div><input id='radioShowTrue' type='radio' name='weigths' value='true'  onclick='managementSetShow("true")'>True</div>
-                        <div><input id='radioShowFalse' type='radio' name='weigths' value='false' onclick='managementSetShow("false")' checked>False</div>
-                    </div>
-                    <div class='formGroup flexCol'>
-                        Luck type:
-                        <div><input id='radioTypeAll' type='radio' name='type' value='all' onclick="managementSetType('all')">All</div>
-                        <div><input id='radioTypeEliminate' type='radio' name='type' value='elimination' onclick="managementSetType('eliminate')" checked>Elimination</div>
-                        <div><input id='radioTypeWeigth' type='radio' name='type' value='wheights' onclick="managementSetType('weigth')">Wheights</div>
-                    </div>
-                    <div class='formGroup flexCol flexGrow'>
-                        Add (each new item by new line):
-                        <textarea id='text' rows="15"></textarea>
-                        <button onclick='managementAddToList()'>Add to list</button>
-                    </div>
-                    <div class='formGroup flexCenter'>
-                        <button onclick='managementClearWeights()'>Reset weights</button>
-                        <button onclick='managementClear()'>Clear data storage</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Roulette</title>
+
+  <!-- Stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="./app-style.css" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="./app-animation.js"></script>
+  <script src="./app-script.js"></script>
+</head>
+
+<body onload="init()">
+  <canvas id="cnv"></canvas>
+  <div class="controls">
+    <div class="boxTitle">
+      List:
+    </div>
+    <div class="boxText">
+      <textarea id="text" placeholder="Enter the list here..."></textarea>
+    </div>
+    <div>
+      <input id="play" type='button' onclick='play()' value='Play !' />
+    </div>
+  </div>
+</body>
+
 </html>

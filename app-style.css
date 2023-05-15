@@ -1,0 +1,49 @@
+html {
+  background-color: #fff;
+  font-family: "Open Sans", sans-serif;
+  height: 100%;
+}
+
+html {
+  -webkit-app-region: drag;
+}
+
+body {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+#cnv {
+  height: 100%;
+  width: calc(100% - 150px);
+}
+
+.controls {
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+}
+
+.controls > div {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  padding: 8px;
+  width: 100%;
+}
+
+.controls > .boxTitle {
+  justify-content: left;
+  padding-bottom: 0;
+}
+
+.controls > .boxText {
+  flex-grow: 1;
+}
