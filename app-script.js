@@ -121,7 +121,7 @@ function drawList () {
     ctx.translate(migX, migY)
     ctx.rotate(angleM)
 
-    ctx.fillText(nom, radi - ctx.measureText(nom).width - 6, 0)
+    ctx.fillText(nom, radi - ctx.measureText(nom).width - 6 * devicePixelRatio, 0)
     ctx.beginPath()
     ctx.moveTo(0, 0)
     ctx.lineTo(radi * Math.cos(angleB), radi * Math.sin(angleB))
