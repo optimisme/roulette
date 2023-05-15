@@ -110,7 +110,7 @@ function drawList () {
   ctx.fill()
 
   ctx.fillStyle = '#555'
-  ctx.lineWidth = 0.5 *  devicePixelRatio
+  ctx.lineWidth = 0.75 *  devicePixelRatio
   for (cnt = 0; cnt < espais; cnt = cnt + 1) {
     nom = list[cnt]
     angleM = angleAdd
