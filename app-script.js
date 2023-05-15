@@ -1,4 +1,4 @@
-const devicePixelRatio = window.devicePixelRatio || 1;
+var devicePixelRatio = window.devicePixelRatio || 1
 var list = []
 var cnv = null
 var ctx = null
@@ -145,8 +145,10 @@ function drawList () {
 }
 
 function resize () {
-  
   let ref = document.querySelector('.controls')
+
+  devicePixelRatio = window.devicePixelRatio || 1 // Change to another screen
+
   cnv.height = document.body.clientHeight * devicePixelRatio
   cnv.width = (document.body.clientWidth - ref.offsetWidth) * devicePixelRatio
 }
