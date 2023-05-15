@@ -25,9 +25,6 @@ function init() {
 
   refText.innerHTML = list.join("\n")
 
-  cnv.width = 500
-  cnv.height = 500
-
   resize()
   window.addEventListener('resize', resize)
 
