@@ -94,8 +94,8 @@ function drawList () {
   angleB = -angleEspaisHalf
   angleM = 0
   angleE = +angleEspaisHalf
-  alumne = Math.round(((-angle % twoPI)) * espais / twoPI)
-  if (alumne === espais) { alumne = 0 }
+  selectedItem = Math.round(((-angle % twoPI)) * espais / twoPI)
+  if (selectedItem === espais) { selectedItem = 0 }
 
   ctx.fillStyle = '#555'
   ctx.font = (16 * devicePixelRatio) + 'px "Open Sans"'
@@ -155,8 +155,8 @@ async function play () {
 
   var temps = Math.floor(Math.random() * 7500) + 5000
   var voltes = Math.floor(Math.random() * 5) + 2
-  var alumne = Math.floor(Math.random() * espais)
+  var selectedItem = Math.floor(Math.random() * espais)
 
-  angleAlumne = (alumne > 0) ? (twoPI * alumne / espais) : 0
-  anim.setAnimation('ease-out', angle - (twoPI * voltes), -angleAlumne, temps)
+  angleSelected = (selectedItem > 0) ? (twoPI * selectedItem / espais) : 0
+  anim.setAnimation('ease-out', angle - (twoPI * voltes), -angleSelected, temps)
 }
