@@ -1,5 +1,5 @@
 const devicePixelRatio = window.devicePixelRatio || 1;
-var grup = ''
+var list = []
 var cnv = null
 var ctx = null
 var timeLast = 0
@@ -10,14 +10,7 @@ var fpsDraw = false
 var angle = 0
 var anim = new Animation()
 var espais = 0
-var selGrup = null
-var selAssignatura = null
-var ultimAlumne = ''
-var ultimDate = Date.now()
-var played = false
 var refText = ""
-
-var list = []
 
 function init() {
   cnv = document.getElementById('cnv')
@@ -28,13 +21,12 @@ function init() {
   refText.addEventListener('change', () => { updateList() })
 
   list = ["Dog 🐶", "Cat 🐱", "Bear 🐻", "Unicorn 🦄", "Lion 🦁", "Cow 🐮", "Pig 🐷", "Hamster 🐹", "Penguin 🐧"]
+  espais = list.length
+
   refText.innerHTML = list.join("\n")
 
   cnv.width = 500
   cnv.height = 500
-
-  grup = list
-  espais = list.length
 
   resize()
   window.addEventListener('resize', resize)
@@ -49,7 +41,9 @@ function updateList() {
 
 function draw () {
 
-  drawBackground()
+  // Draw background
+  ctx.fillStyle = '#fff'
+  ctx.fillRect(0, 0, cnv.width, cnv.height)
 
   setFPS()
   if (fpsDraw) {
@@ -61,15 +55,9 @@ function draw () {
   anim.run()
   angle = anim.value
 
-  drawGrup()
+  drawList()
 
   window.requestAnimationFrame(draw)
-}
-
-function drawBackground () {
-
-  ctx.fillStyle = '#fff'
-  ctx.fillRect(0, 0, cnv.width, cnv.height)
 }
 
 function setFPS () {
@@ -89,7 +77,7 @@ function setFPS () {
   fps = 1 / delta
 } 
 
-function drawGrup () {
+function drawList () {
 
   cnt = 0
   nom = ''
@@ -146,14 +134,14 @@ function drawGrup () {
     angleAdd = angleAdd + angleEspais
   }
 
+  let triangle = 4 * devicePixelRatio
   ctx.fillStyle = '#222'
   ctx.beginPath()
-  ctx.moveTo(migX + radi + 4, migY)
-  ctx.lineTo(migX + radi + 16, migY - 8)
-  ctx.lineTo(migX + radi + 16, migY + 8)
+  ctx.moveTo(migX + radi + triangle, migY)
+  ctx.lineTo(migX + radi + triangle * 4, migY - triangle * 2)
+  ctx.lineTo(migX + radi + triangle * 4, migY + triangle * 2)
   ctx.closePath()
   ctx.fill()
-
 }
 
 function resize () {
@@ -171,24 +159,4 @@ async function play () {
 
   angleAlumne = (alumne > 0) ? (twoPI * alumne / espais) : 0
   anim.setAnimation('ease-out', angle - (twoPI * voltes), -angleAlumne, temps)
-  ultimDate = Date.now()
-
-  played = true
-}
-
-async function setStats (stat) {
-  var idxAssg = selAssignatura.selectedIndex
-  var valAssg = selAssignatura.options[idxAssg].value
-  var idxGrup = selGrup.selectedIndex
-  var valGrup = selGrup.options[idxGrup].value
-  var storageName = valAssg + '-' + valGrup
-  var storageTxt = null
-
-  try { storageTxt = await storageGetItem(storageName) } catch (e) { console.warn(e) }
-
-  played = false
-}
-
-function fillSpaces (str, val) {
-  return (new Array(val - str.length + 1)).join('&nbsp;')
 }
