@@ -30,13 +30,13 @@ class Animation {
         this.valueDif = end - begin
      }
 
-     isRunning () {
-
-        return this.timeEnd >= performance.now()
+     isRunning () {      
+        let roundEnd = Math.round(this.timeEnd * 1000) / 1000
+        let roundNow = Math.round(performance.now() * 1000) / 1000
+        return roundEnd >= roundNow
      }
 
      isEnded () {
-
         return !this.isRunning()
      }
 

@@ -35,7 +35,7 @@ body {
   display: flex;
   box-sizing: border-box;
   justify-content: center;
-  padding: 8px;
+  padding-top: 8px;
   width: 100%;
 }
 
@@ -46,4 +46,8 @@ body {
 
 .controls > .boxText {
   flex-grow: 1;
+}
+
+.controls > div:last-child {
+  padding-bottom: 8px;
 }

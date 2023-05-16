@@ -9,8 +9,11 @@ var fps = 0
 var fpsDraw = false
 var angle = 0
 var anim = new Animation()
+var animEnded = true
+var selectedItem = -1
 var espais = 0
 var refText = ""
+var countLandings = false
 
 function init() {
   cnv = document.getElementById('cnv')
@@ -20,10 +23,10 @@ function init() {
   refText.addEventListener('keyup', () => { updateList() })
   refText.addEventListener('change', () => { updateList() })
 
-  list = ["Dog 🐶", "Cat 🐱", "Bear 🐻", "Unicorn 🦄", "Lion 🦁", "Cow 🐮", "Pig 🐷", "Hamster 🐹", "Penguin 🐧"]
-  espais = list.length
+  let names = ["Dog 🐶", "Cat 🐱", "Bear 🐻", "Unicorn 🦄", "Lion 🦁", "Cow 🐮", "Pig 🐷", "Hamster 🐹", "Penguin 🐧"]
+  refText.innerHTML = names.join("\n")
 
-  refText.innerHTML = list.join("\n")
+  updateList();
 
   resize()
   window.addEventListener('resize', resize)
@@ -32,7 +35,33 @@ function init() {
 }
 
 function updateList() {
-  list = refText.value.split("\n")
+  let names = refText.value.split("\n")
+  
+  for (let i = 0; i < list.length; i++) {
+    let item = list[i];
+    
+    // Comprova si el nom està a "names"
+    if (!names.includes(item.name + ' ')) {
+      list.splice(i, 1) // Elimina l'element de la llista
+      i-- // Disminueix l'índex per compensar l'eliminació
+    }
+  }
+  
+  names.forEach((name) => {
+    let found = false;
+    
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].name === name) {
+        found = true;
+        break;
+      }
+    }
+    
+    if (!found) {
+      list.push({ name: name, counter: 0 })
+    }
+  })
+
   espais = list.length
 }
 
@@ -50,8 +79,11 @@ function draw () {
   }
 
   anim.run()
+  if (!animEnded && anim.isEnded()) {
+    animEnded = true
+    list[selectedItem].counter++
+  }
   angle = anim.value
-
   drawList()
 
   window.requestAnimationFrame(draw)
@@ -91,9 +123,7 @@ function drawList () {
   angleB = -angleEspaisHalf
   angleM = 0
   angleE = +angleEspaisHalf
-  selectedItem = Math.round(((-angle % twoPI)) * espais / twoPI)
-  if (selectedItem === espais) { selectedItem = 0 }
-
+  
   ctx.fillStyle = '#555'
   ctx.font = (16 * devicePixelRatio) + 'px "Open Sans"'
   ctx.textBaseline = 'middle'
@@ -109,7 +139,10 @@ function drawList () {
   ctx.fillStyle = '#555'
   ctx.lineWidth = 0.75 *  devicePixelRatio
   for (cnt = 0; cnt < espais; cnt = cnt + 1) {
-    nom = list[cnt]
+    nom = list[cnt].name
+    if (countLandings) {
+      nom = nom + " (" + list[cnt].counter + ")"
+    }
     angleM = angleAdd
     angleB = -angleEspaisHalf
     angleE = +angleEspaisHalf
@@ -154,8 +187,36 @@ async function play () {
 
   var temps = Math.floor(Math.random() * 7500) + 5000
   var voltes = Math.floor(Math.random() * 5) + 2
-  var selectedItem = Math.floor(Math.random() * espais)
+
+  if (!countLandings) {
+    selectedItem = Math.floor(Math.random() * espais)
+  } else {
+    selectedItem = getSelectedByCounter()
+  }
 
   angleSelected = (selectedItem > 0) ? (twoPI * selectedItem / espais) : 0
   anim.setAnimation('ease-out', angle - (twoPI * voltes), -angleSelected, temps)
+
+  animEnded = false
+}
+
+function getSelectedByCounter() {
+    // Calculem la suma total dels inversos dels comptadors
+    // Tractem el contador 0 com un valor gran (1e10)
+    let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / item.counter), 0);
+
+    // Generem un número aleatori entre 0 i la suma total
+    let aleatori = Math.random() * sumaTotal;
+
+    // Anem sumant els inversos dels comptadors fins que superem el número aleatori
+    for(let i = 0; i < list.length; i++) {
+        aleatori -= (list[i].counter === 0 ? 1e10 : 1 / list[i].counter);
+        if(aleatori < 0) {
+            return i;
+        }
+    }
+}
+
+function checkboxClick (e) {
+  countLandings = document.querySelector('#checkCount').checked
 }
