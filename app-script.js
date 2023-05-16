@@ -202,6 +202,10 @@ async function play () {
 }
 
 function getSelectedByCounter() {
+  // La inversa lineal 1/x no dóna prou pes als valors amb comptadors baixos
+  // La inversa de l'arrel quadrada 1/sqrt(x) dóna més pes als valors amb comptadors baixos
+  // La inversa del quadrat 1/x^2 dóna massa pes als valors amb comptadors baixos
+
   // Calculem la suma total dels inversos de les arrels dels comptadors
   // Tractem el contador 0 com un valor gran (1e10)
   let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / Math.sqrt(item.counter)), 0);
