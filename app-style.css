@@ -46,6 +46,7 @@ body {
 
 .controls > .boxText {
   flex-grow: 1;
+  padding-right: 8px;
 }
 
 .controls > div:last-child {
