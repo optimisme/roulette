@@ -26,9 +26,10 @@ function init() {
   let names = ["Dog 🐶", "Cat 🐱", "Bear 🐻", "Unicorn 🦄", "Lion 🦁", "Cow 🐮", "Pig 🐷", "Hamster 🐹", "Penguin 🐧"]
   refText.innerHTML = names.join("\n")
 
-  updateList();
-
+  setCountLandings()
+  updateList()
   resize()
+  
   window.addEventListener('resize', resize)
 
   window.requestAnimationFrame(draw)
@@ -217,6 +218,6 @@ function getSelectedByCounter() {
     }
 }
 
-function checkboxClick (e) {
+function setCountLandings () {
   countLandings = document.querySelector('#checkCount').checked
 }
