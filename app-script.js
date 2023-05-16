@@ -29,7 +29,7 @@ function init() {
   setCountLandings()
   updateList()
   resize()
-  
+
   window.addEventListener('resize', resize)
 
   window.requestAnimationFrame(draw)
@@ -202,20 +202,20 @@ async function play () {
 }
 
 function getSelectedByCounter() {
-    // Calculem la suma total dels inversos dels comptadors
-    // Tractem el contador 0 com un valor gran (1e10)
-    let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / item.counter), 0);
+  // Calculem la suma total dels inversos dels quadrats dels comptadors
+  // Tractem el contador 0 com un valor gran (1e10)
+  let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / (item.counter * item.counter)), 0);
 
-    // Generem un número aleatori entre 0 i la suma total
-    let aleatori = Math.random() * sumaTotal;
+  // Generem un número aleatori entre 0 i la suma total
+  let aleatori = Math.random() * sumaTotal;
 
-    // Anem sumant els inversos dels comptadors fins que superem el número aleatori
-    for(let i = 0; i < list.length; i++) {
-        aleatori -= (list[i].counter === 0 ? 1e10 : 1 / list[i].counter);
-        if(aleatori < 0) {
-            return i;
-        }
-    }
+  // Anem sumant els inversos dels quadrats dels comptadors fins que superem el número aleatori
+  for(let i = 0; i < list.length; i++) {
+      aleatori -= (list[i].counter === 0 ? 1e10 : 1 / (list[i].counter * list[i].counter));
+      if(aleatori < 0) {
+          return i;
+      }
+  }
 }
 
 function setCountLandings () {
