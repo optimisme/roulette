@@ -202,21 +202,22 @@ async function play () {
 }
 
 function getSelectedByCounter() {
-  // Calculem la suma total dels inversos dels quadrats dels comptadors
+  // Calculem la suma total dels inversos de les arrels dels comptadors
   // Tractem el contador 0 com un valor gran (1e10)
-  let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / (item.counter * item.counter)), 0);
+  let sumaTotal = list.reduce((total, item) => total + (item.counter === 0 ? 1e10 : 1 / Math.sqrt(item.counter)), 0);
 
   // Generem un número aleatori entre 0 i la suma total
   let aleatori = Math.random() * sumaTotal;
 
-  // Anem sumant els inversos dels quadrats dels comptadors fins que superem el número aleatori
+  // Anem sumant els inversos de les arrels dels comptadors fins que superem el número aleatori
   for(let i = 0; i < list.length; i++) {
-      aleatori -= (list[i].counter === 0 ? 1e10 : 1 / (list[i].counter * list[i].counter));
+      aleatori -= (list[i].counter === 0 ? 1e10 : 1 / Math.sqrt(list[i].counter));
       if(aleatori < 0) {
           return i;
       }
   }
 }
+
 
 function setCountLandings () {
   countLandings = document.querySelector('#checkCount').checked
