@@ -37,32 +37,26 @@ function init() {
 
 function updateList() {
   let names = refText.value.split("\n")
-  
-  for (let i = 0; i < list.length; i++) {
-    let item = list[i];
-    
-    // Comprova si el nom està a "names"
-    if (!names.includes(item.name + ' ')) {
-      list.splice(i, 1) // Elimina l'element de la llista
-      i-- // Disminueix l'índex per compensar l'eliminació
-    }
-  }
-  
-  names.forEach((name) => {
-    let found = false;
-    
+  let newList = []
+
+  for (let n = 0; n < names.length; n++) {
+    let name = names[n]
+    let found = false
+
     for (let i = 0; i < list.length; i++) {
       if (list[i].name === name) {
-        found = true;
-        break;
+        found = true
+        newList.push(list[i])
+        break
       }
     }
     
     if (!found) {
-      list.push({ name: name, counter: 0 })
+      newList.push({ name: name, counter: 0 })
     }
-  })
+  }
 
+  list = newList
   espais = list.length
 }
 
